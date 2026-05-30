@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=1170, user-scalable=no">
+    <title>정부24</title>
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="정부24">
+    <meta name="theme-color" id="theme-meta" content="#ffffff">
+    <link rel="apple-touch-icon" href="https://is1-ssl.mzstatic.com/image/thumb/Purple211/v4/b2/45/a4/b245a413-a315-5039-98a2-177b45519f7a/AppIcon-0-0-1x_U007emarketing-0-8-0-0-85-220.png/230x230bb.webp">
+    <style>
+        html { background-color: #ffffff; transition: background-color 0.1s; }
+        body { margin: 0; padding: 0; background-color: #ffffff; min-width: 1170px; -webkit-tap-highlight-color: rgba(0,0,0,0); overflow-x: hidden; transition: background-color 0.1s;}
+        img { display: block; border: none; -webkit-user-drag: none; width: 100%; height: auto; }
+        #main-page, #menu-page, #setting-layer { width: 100%; min-height: 100vh; padding-bottom: 295px; box-sizing: border-box; display: none; }
+        #main-page { display: block; }
+        #menu-page { background-color: #eef2f7 !important; }
+        .image-container { position: relative; width: 1170px; margin: 0 auto; }
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.4); z-index: 20000; display: none; justify-content: center; align-items: center; }
+        #community-frame { position: relative; width: 1170px; height: 2532px; background: url('images/community.webp') no-repeat center; background-size: contain; }
+        #community-scroll-area { position: absolute; top: 388px; left: 164px; width: 842px; height: 1608px; overflow-y: auto; overflow-x: hidden; scrollbar-width: none; background-color: #ffffff; }
+        #new-page-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 30000;display: none; background-color: #ffffff !important;overflow-y: hidden; -webkit-overflow-scrolling: touch;}
+        .bounce-container { position: relative; width: 1170px; height: calc(100% + 1px);margin: 0 auto; background-color: #ffffff; }
+        .full-id-screen { position: absolute; top: 0; left: 0; width: 1170px; height: 2289px; display: none; background-color: #ffffff; }
+        #final-screen { z-index: 30003; } 
+        #id-detail-screen { z-index: 30005; }
+        .layer-img { position: absolute; top: 0; left: 0; width: 1170px;height: auto;}
+        #live-time-text {position: absolute;top: 1613px;left: 50%;transform: translateX(-50%);width: 100%;text-align: center;font-family: "AppleSDGothicNeoM00", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;font-weight: normal;font-size: 55px;color: #000000;opacity: 55%;letter-spacing: -2px; z-index: 30015;pointer-events: none;}
+        .timer-text {position: absolute;top: 1441px;font-family: "AppleSDGothicNeoM00", "Apple SD Gothic Neo", sans-serif;font-size: 48px; color: #0e62df; opacity: 75%;letter-spacing: -2px; z-index: 30020;}
+        #label-left { left: 142px; text-align: left; }
+        #timer-right { left: 1028px; transform: translateX(-100%); text-align: right; }
+        .progress-container {position: absolute;top: 1396px; left: 50%;transform: translateX(-50%);width: 887px;height: 13px;background-color: #e5e5e5;border-radius: 10px;overflow: hidden;z-index: 30020;}
+        #progress-bar {width: 100%;height: 100%;background-color: #0e62df;border-radius: 0px;transition: width 0s; }
+        #qr-image-container {position: absolute;top: 0;left: 0;width: 1170px;height: 2305px;z-index: 30010; pointer-events: none;display: block; }
+        #qr-display {width: 100%;height: 100%;object-fit: contain; }
+        #toggle-sw-btn {transition: left 0.2s ease;}
+        .ios-alert-overlay {position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0, 0, 0, 0.2);z-index: 999999; display: none; justify-content: center; align-items: center;animation: fadeInOverlay 0.3s cubic-bezier(0.1, 1, 0.9, 1);}
+        @keyframes fadeInOverlay {from { background: rgba(0, 0, 0, 0); }to { background: rgba(0, 0, 0, 0.2); }}
+        .ios-alert {width: 823px; margin-bottom: 119px;background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(80px); -webkit-backdrop-filter: blur(80px);border-radius: 40px; overflow: hidden;animation: alertPop 0.3s cubic-bezier(0.1, 1, 0.9, 1);border: none;box-shadow: none;}
+        @keyframes alertPop {from { transform: scale(1.2); opacity: 0; }to { transform: scale(1); opacity: 1; }}
+        @keyframes fadeOutOverlay {from { background: rgba(0, 0, 0, 0.15); }to { background: rgba(0, 0, 0, 0); }}
+        @keyframes alertPush {from { transform: scale(1); opacity: 1; }to { transform: scale(1); opacity: 0; }}
+        .ios-alert-overlay.showing {display: flex !important;animation: fadeInOverlay 0.3s forwards;}
+        .ios-alert-overlay.showing .ios-alert {animation: alertPop 0.5s cubic-bezier(0.43, 1, 0.26, 1) forwards;}
+        .fade-out-instant {opacity: 0 !important;transition: opacity 0.05s linear !important;}
+        .make-white-bg {background: #ffffff !important;}
+        .make-white-bg * {opacity: 0 !important;transition: none !important;}
+        @keyframes slideDown {from { transform: translateY(0); }to { transform: translateY(100%); }}
+        .exit-animation {animation: slideDown 0.5s cubic-bezier(0.4, 0, 0.2, 1) forwards !important;}
+        .force-white {background-color: #ffffff !important;z-index: 99999 !important;opacity: 1 !important;}
+        .force-white * {opacity: 0 !important;visibility: hidden !important;transition: none !important;}
+        .ios-alert-overlay.hiding { animation: fadeOutOverlay 0.3s forwards;}
+        .ios-alert-overlay.hiding .ios-alert {animation: alertPush 0.3s forwards;}
+        @media (prefers-color-scheme: dark) {
+        .ios-alert-overlay {position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0, 0, 0, 48%);z-index: 999999; display: none; justify-content: center; align-items: center;animation: fadeInOverlay 0.3s cubic-bezier(0.1, 1, 0.9, 1);}
+         @keyframes fadeInOverlay {from { background: rgba(0, 0, 0, 0); }to { background: rgba(0, 0, 0, 48%); }}
+        .ios-alert {background: rgba(0, 0, 0, 52%) !important;backdrop-filter: blur(80px);-webkit-backdrop-filter: blur(80px);}
+        .ios-alert div style {color: #ffffff !important;}
+        .ios-alert [style*="color: #000"], 
+        .ios-alert [style*="color: #000000"] {color: #ffffff !important;}
+        .ios-alert [style*="border-top"] {border-top: 1px solid rgba(255, 255, 255, 0.3) !important;}
+        .ios-alert [style*="border-right"] {border-right: 1px solid rgba(255, 255, 255, 0.3) !important;}
+        .ios-alert [style*="color: #007aff"] {color: #2f96ff !important;}}
+        #white-solid { position: fixed; top: 100%; left: 0; width: 100%; height: 100%; background: #ffffff; transition: top 0.6s cubic-bezier(0.22, 1, 0.36, 1); z-index: 31001; pointer-events: none;}
+        #black-solid { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000000; display: none; z-index: 31002; pointer-events: none; }
+        #notice-container { position: absolute; top: 0; left: 0; width: 1170px; height: 2289px; z-index: 30010; overflow: hidden; pointer-events: none; }
+        .notice-wrapper { display: flex; width: fit-content; animation: moveLeft 11s linear infinite; transform-origin: 0px 2230px; scale: 1.06; }
+        @keyframes moveLeft { 0% { transform: translateX(0); } 100% { transform: translateX(-1200px); } }
+        #dark-dim { position: absolute; top: 0; left: 0; width: 100%; height: 2289px; background: rgba(0,0,0,0.4); z-index: 1; }
+        #id-wn { position: relative; width: 1170px; z-index: 2; cursor: pointer; }
+        .bottom-black-bg { position: fixed; bottom: 0; left: 50%; transform: translateX(-50%); width: 1170px; height: 60px; background-color: #ffffff; z-index: 21001; pointer-events: none; }
+        @media (prefers-color-scheme: dark) {.bottom-black-bg {background-color: #000000;}}
+        .bottom-bar { position: fixed; bottom: 60px; left: 50%; transform: translateX(-50%); width: 1170px; z-index: 21002; pointer-events: none; }
+        .header-container { position: fixed; top: 0; left: 50%; transform: translateX(-50%); width: 1170px; height: 216px; z-index: 9999; background-color: #ffffff; }
+        .underline-effect { position: absolute; top: 72px; left: 143px; width: 210px; height: 72px; pointer-events: none; border-bottom: 4px solid transparent; box-sizing: border-box; }
+        .underline-active { border-bottom: 4px solid #1e2124 !important; }
+        .search-container { position: fixed; bottom: 295px; left: 50%; transform: translateX(-50%); width: 1170px; height: 268px; z-index: 1800; pointer-events: none; }
+        .search-img, .scroll-top-btn { pointer-events: auto; }
+        .search-img { position: absolute; bottom: 0; left: 0; width: 100%; cursor: pointer; }
+        .scroll-top-btn { position: fixed; z-index: 1500; left: 50%; margin-left: 338px; bottom: -300px; width: 230px; height: 230px; cursor: pointer; transition: bottom 0.7s ease-in-out; }
+        .scroll-top-btn.show { bottom: 575px; }
+        .lifeguard-box { position: absolute; top: 2503px; left: 50%; margin-left: -495px; width: 990px; height: 254px; overflow-x: auto; overflow-y: hidden; white-space: nowrap; z-index: 5; scrollbar-width: none; }
+        .fade-out-fast { animation: fadeOut 0.3s ease-out forwards; }
+        @keyframes fadeOut { 0% { opacity: 1; } 100% { opacity: 0; } }
+        * { -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; }
+    </style>
+</head>
+<body>
+    <div id="white-solid"></div>
+    <div id="black-solid"></div>
+    <div id="new-page-overlay">
+        <div class="bounce-container">
+            <div id="final-screen" class="full-id-screen">
+                <img src="images/id_wn_bg.webp" class="layer-img" style="object-fit: cover;">
+                <div id="dark-dim"></div>
+                <img src="images/id_wn.webp" id="id-wn" onclick="handleIdWnClick(event)">
+            </div>
+            <div id="id-detail-screen" class="full-id-screen">
+                <div class="bounce-content">
+                    <img src="images/id_bg.webp" class="layer-img">
+                    <img src="images/id_name.webp" class="layer-img" style="z-index: 30100;pointer-events: none;">
+                    <img src="images/id_profile.webp" class="layer-img" style="z-index: 30100;pointer-events: none;">
+                    <div id="id-main-group">
+                        <img src="images/id_main.webp" class="layer-img" style="z-index: 30006; height: 2289px;">
+                        <div id="detail-toggle-btn" 
+                            style="position: absolute; top: 1760px; left: 59px; width: 1053px; height: 186px; z-index: 30050; cursor: pointer; background: rgba(255,0,0,0);" 
+                            onclick="toggleToDetails()">
+                        </div>
+                        <div id="qr-image-container" style="z-index: 30010;">
+                            <img id="qr-display" src="images/id_qr_1.webp" alt="QR Image">
+                        </div>
+                        <div id="label-left" class="timer-text">남은시간</div>
+                        <div id="timer-right" class="timer-text">30초</div>
+                        <div class="progress-container">
+                            <div id="progress-bar"></div>
+                        </div>
+                        <div id="live-time-text">0000년00월00일 00:00:00</div>
+                    </div>
+
+                    <div id="id-details-group" style="display: none;">
+                        <img src="images/id_details.webp" id="details-main-img" class="layer-img" style="z-index: 30030;">
+                        <img src="images/id_details_1.webp" id="details-toggle-img" class="layer-img" style="z-index: 30031;">
+                        <img src="images/id_toggle_switch.webp" id="toggle-sw-bg" class="layer-img" style="opacity: 0;z-index: 30032;">
+                        <img src="images/id_toggle_switch_button.webp" id="toggle-sw-btn" class="layer-img" style="left: -115px; z-index: 30033;">
+                        <div style="position: absolute; top: 62px; left: 49px; width: 206px; height: 75px; z-index: 31005; cursor: pointer;" onclick="confirmExit()"></div>
+                        <div id="toggle-click-zone" 
+                             style="position: absolute; left: 843px; top: 903px; width: 205px; height: 90px; z-index: 31010; cursor: pointer;" 
+                             onclick="handleToggle()"></div>
+                    </div>
+
+                    <div style="position: absolute; top: 62px; left: 49px; width: 206px; height: 75px; z-index: 31000; cursor: pointer;" onclick="confirmExit()"></div>
+                    <div id="notice-container">
+                        <div class="notice-wrapper">
+                            <img src="images/id_notice.webp" class="notice-img"><div style="width:30px; flex-shrink:0;"></div>
+                            <img src="images/id_notice.webp" class="notice-img"><div style="width:30px; flex-shrink:0;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="community-overlay" class="modal-overlay">
+        <div id="community-frame" onclick="handleCommunityFrameClick(event)">
+            <div id="community-scroll-area"><img src="images/community_body.webp"></div>
+        </div>
+    </div>
+    <div class="bottom-black-bg" id="bot-bg"></div>
+    <img src="images/bar.webp" class="bottom-bar" id="bot-bar">
+    <div id="main-page" style="display: block;">
+        <div class="search-container">
+            <img src="images/search.webp" id="main-search-img" class="search-img" onclick="handleSearchClick(event)">
+        </div>
+        <div class="image-container" style="height: 2757px;">
+            <img src="images/body1.webp">
+            <div style="position:absolute; top:153px; left:37px; width:306px; height:81px; cursor:pointer; z-index:11;" onclick="openSetting()"></div>
+            <img src="images/name.webp" style="position:absolute; top:163px; left:47px; width:286px; height:61px; pointer-events:none;">
+            <img src="images/my_favor_logo.webp" style="position:absolute; top:1696px; left:830px; width:292px; height:91px;">
+            <div style="position:absolute; top:131px; left:995px; width:139px; height:122px; cursor:pointer; z-index:10;" onclick="openMenu()"></div>
+            <div class="lifeguard-box">
+                <div style="position:relative; width:1068px; height:254px;">
+                    <img src="images/lifeguard1.webp" id="lifeguard-img" style="width:1068px; height:100%;" onclick="changeLifeguardImage(event)">
+                    <img src="" id="lifeguard-overlay" style="position:absolute; top:0; left:0; width:1068px; height:100%; z-index:10; pointer-events:none; opacity:0;">
+                </div>
+            </div>
+        </div>
+        <div class="image-container">
+            <img src="images/lg1_short.webp" id="target-lg">
+            <div id="click-zone" style="position:absolute; cursor:pointer;" onclick="toggleLgImage()"></div>
+        </div>
+        <div class="image-container"><img src="images/body2.webp" onclick="handleBody2Click(event)"></div>
+        <div class="image-container">
+            <img src="images/footer1.webp" id="target-footer">
+            <div style="position:absolute; top:104px; left:344px; width:75px; height:60px; cursor:pointer; z-index:1000;" onclick="toggleFooterImage()"></div>
+        </div>
+        <img src="images/footer.webp">
+    </div>
+    <div id="setting-layer">
+        <div class="image-container">
+            <img src="images/setting_hide.webp" id="setting-top-img" onclick="handleSettingTopClick(event)">
+            <img src="images/setting_help1.webp" id="setting-h1" style="position:absolute; left:0; width:1170px; z-index:2005; display:none; top:313px;" onclick="document.getElementById('setting-h1').style.display='none'">
+            <div style="position:relative; width:1170px;">
+                <img src="images/setting_help2.webp" id="setting-h2" style="position:absolute; left:0; width:1170px; z-index:2005; display:none; top:auto; bottom:calc(100% - 79px);" onclick="document.getElementById('setting-h2').style.display='none'">
+                <img src="images/setting.webp" id="setting-bottom-img" onclick="handleSettingBottomClick(event)">
+            </div>
+        </div>
+    </div>
+    <div id="menu-page">
+        <div class="header-container">
+            <img src="images/menu_header.webp">
+            <div onclick="closeMenu()" style="position:absolute; top:73px; left:1051px; width:71px; height:69px; cursor:pointer;"></div>
+            <div id="menu-btn" style="position:absolute; top:62px; left:47px; width:322px; height:86px; cursor:pointer;"></div>
+            <div id="underline" class="underline-effect"></div>
+        </div>
+        <div style="width:1170px; margin:216px auto 0; background-color: #eef2f7; position: relative;">
+            <img src="images/menu_body.webp">
+            <div style="position: absolute; top: 4836px; left: 594px; width: 527px; height: 179px; cursor: pointer; z-index: 100;" onclick="handleMenuIdClick()"></div>
+            <div style="position:relative; width:1170px;">
+                <img src="images/menu_footer_hide.webp" id="menu-footer-img" onclick="handleMenuFooterClick(event)">
+            </div>
+        </div>
+    </div>
+    <img src="images/pgup_logo.webp" id="scrollTopBtn" class="scroll-top-btn" onclick="scrollToTop()">
+    <div id="ios-modal" class="ios-alert-overlay">
+        <div class="ios-alert">
+            <div style="padding: 65px 40px 60px; text-align: center;">
+                <div style="font-size: 39px; line-height: 1.3; color: #000; font-family: -apple-system, sans-serif; letter-spacing: 0px;">
+                    주민등록증 모바일 확인서비스를<br>중단하시겠습니까?
+                </div>
+            </div>
+            <div style="display: flex; border-top: 1px solid rgba(0, 0, 0, 0.3); height: 130px;">
+                <div style="flex: 1; display: flex; align-items: center; justify-content: center; font-size: 52px; color: #007aff; border-right: 1px solid rgba(0, 0, 0, 0.3); cursor: pointer;" 
+                    onclick="closeIosModal()">취소
+                </div>
+                <div style="flex: 1; display: flex; align-items: center; justify-content: center; font-size: 52px; color: #007aff; cursor: pointer;" 
+                    onclick="exitService()">확인
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        const scrollTopBtn = document.getElementById('scrollTopBtn');
+        const menuBtn = document.getElementById('menu-btn');
+        const underline = document.getElementById('underline');
+        const botBar = document.getElementById('bot-bar');
+        const botBg = document.getElementById('bot-bg');
+        let currentMode = 'ai', currentS = 1, isAiHelpClosed = false, isGovHelpClosed = false, isRedirecting = false;
+        let isMenuTransition = false;
+        let lastMenuTouchEnd = 0;
+        let lastTouchEnd = 0;function updateThemeColor(color) { if (document.getElementById('theme-meta')) document.getElementById('theme-meta').setAttribute('content', color); }function scrollToTop() { const overlay = document.getElementById('new-page-overlay');if (overlay.style.display === 'block') {overlay.scrollTo({top:0, behavior:'smooth'});} else {window.scrollTo({top:0, behavior:'smooth'}); }}window.onscroll = () => {if (document.getElementById('main-page').style.display === 'block' && window.scrollY > 800) scrollTopBtn.classList.add('show');else scrollTopBtn.classList.remove('show');};document.getElementById('new-page-overlay').onscroll = function() {if (this.scrollTop > 500) scrollTopBtn.classList.add('show');else scrollTopBtn.classList.remove('show');};
+        function startNewPageSequence() {const overlay = document.getElementById('new-page-overlay');const white = document.getElementById('white-solid');const black = document.getElementById('black-solid');document.body.style.overflow = 'hidden'; overlay.style.display = 'none';overlay.style.transition = 'none';overlay.style.transform = 'translateY(0)';void overlay.offsetWidth;white.style.transition = "top 0.6s cubic-bezier(0.22, 1, 0.36, 1)";white.style.display = 'block';white.style.pointerEvents = 'auto';white.style.top = '0'; setTimeout(() => {black.style.display = 'block';setTimeout(() => { black.style.display = 'none'; }, 60);}, 1000);setTimeout(() => {overlay.style.display = 'block'; overlay.style.overflowY = 'hidden';document.getElementById('final-screen').style.display = 'block';document.getElementById('id-detail-screen').style.display = 'none';white.style.transition = "none"; white.style.top = '100%'; white.style.pointerEvents = 'none'; if (typeof botBar !== 'undefined') botBar.style.display = 'none';if (typeof botBg !== 'undefined') botBg.style.display = 'none';if (isMenuTransition) {document.getElementById('main-page').style.display = 'none';document.getElementById('menu-page').style.display = 'block';} else {document.getElementById('main-page').style.display = 'block';document.getElementById('menu-page').style.display = 'none';}scrollTopBtn.classList.remove('show');overlay.scrollTo(0, 0);}, 2500); }
+        function handleIdWnClick(e) {const rect = e.target.getBoundingClientRect();const x = e.clientX - rect.left;const y = e.clientY - rect.top;if (x >= 155 && x <= 1017 && y >= 1463 && y <= 1608) {isFirstRun = true; isResetPhase = false;customTimeLeft = 29; qrIndex = 1;updateQrImage();const timerText = document.getElementById('timer-right');const progressBar = document.getElementById('progress-bar');if(timerText) timerText.innerText = "30초"; if(progressBar) progressBar.style.width = "100%"; if (timerInterval) clearInterval(timerInterval);timerInterval = setInterval(runCustomTimer, 1000);document.getElementById('final-screen').style.display = 'none';document.getElementById('id-detail-screen').style.display = 'block';const overlay = document.getElementById('new-page-overlay');overlay.style.overflowY = 'auto';overlay.scrollTo(0, 0);const container = document.querySelector('.bounce-container');if (container) container.scrollTo(0, 0);}}
+        function handleMenuIdClick(e) {if (e) {e.preventDefault();e.stopPropagation();}const now = (new Date()).getTime();if (now - lastMenuTouchEnd <= 300) return;lastMenuTouchEnd = now;isMenuTransition = true;startNewPageSequence();}
+        function exitService() {const modal = document.getElementById('ios-modal');const overlay = document.getElementById('new-page-overlay');const idDetail = document.getElementById('id-detail-screen');if (modal) {modal.classList.remove('showing');modal.classList.add('hiding');setTimeout(() => { modal.style.display = 'none'; }, 300);}document.body.style.overflow = 'auto';if (typeof botBar !== 'undefined') botBar.style.display = 'block';if (typeof botBg !== 'undefined') botBg.style.display = 'block';setTimeout(() => {if (overlay && idDetail) {idDetail.classList.add('force-white');idDetail.style.zIndex = "30005";overlay.style.transition = "transform 0.45s cubic-bezier(0.4, 0, 0.2, 1)"; overlay.style.transform = "translateY(100%)";setTimeout(() => {overlay.style.display = 'none';overlay.style.transition = "none"; overlay.style.transform = "none"; document.getElementById('id-main-group').style.display = 'block';document.getElementById('id-details-group').style.display = 'none';resetToggleState();document.getElementById('main-page').style.display = 'none';document.getElementById('menu-page').style.display = 'none';if (isMenuTransition) {document.getElementById('menu-page').style.display = 'block'; document.documentElement.style.backgroundColor = '#ffffff'; document.body.style.backgroundColor = '#eef2f7'; updateThemeColor('#ffffff');} else {document.getElementById('main-page').style.display = 'block'; document.documentElement.style.backgroundColor = '#ffffff';document.body.style.backgroundColor = '#ffffff';updateThemeColor('#ffffff');}isMenuTransition = false;idDetail.classList.remove('force-white');if (timerInterval) clearInterval(timerInterval);}, 450); }}, 500); }
+        function openMenu() {document.getElementById('menu-footer-img').src = 'images/menu_footer_hide.webp';document.getElementById('main-page').style.display = 'none';document.getElementById('menu-page').style.display = 'block';document.documentElement.style.backgroundColor = '#ffffff'; updateThemeColor('#ffffff');document.body.style.backgroundColor = '#eef2f7'; document.getElementById('menu-page').style.backgroundColor = '#eef2f7';scrollTopBtn.classList.remove('show'); window.scrollTo(0, 0);}
+        function closeMenu() {document.getElementById('menu-page').style.display = 'none';document.getElementById('main-page').style.display = 'block';document.documentElement.style.backgroundColor = '#ffffff';document.body.style.backgroundColor = '#ffffff';updateThemeColor('#ffffff');underline.classList.remove('underline-active');isRedirecting = false;window.scrollTo(0, 0);}
+        function openSetting() {document.getElementById('setting-top-img').src = 'images/setting_hide.webp';document.getElementById('setting-h1').style.display = 'none';document.getElementById('setting-h2').style.display = 'none';document.getElementById('main-page').style.display = 'none';document.getElementById('setting-layer').style.display = 'block';scrollTopBtn.classList.remove('show');window.scrollTo(0, 0);}
+        function closeSetting() {document.getElementById('setting-layer').style.display = 'none';document.getElementById('main-page').style.display = 'block';window.scrollTo(0, 0);}
+        function handleBody2Click(e) {const rect = e.target.getBoundingClientRect();const x = e.clientX - rect.left, y = e.clientY - rect.top;if (x >= 48 && x <= 1122 && y >= 20 && y <= 200) { startNewPageSequence(); return; }if (y >= 323 && y <= 485) { document.getElementById('community-overlay').style.display = 'flex'; document.body.style.overflow = 'hidden'; }}
+        function handleHelpClick(e, mode) {const rect = e.target.getBoundingClientRect();if (e.clientX - rect.left >= 982 && e.clientY - rect.top >= 29 && e.clientX - rect.left <= 1047 && e.clientY - rect.top <= 94) { e.target.style.display = 'none'; if (mode === 'ai') isAiHelpClosed = true; else isGovHelpClosed = true;} else if (e.clientX - rect.left >= 932 && e.clientY - rect.top >= 114) { handleSearchClick(e); }}
+        function changeLifeguardImage(e) {const img = document.getElementById('lifeguard-img'), overlay = document.getElementById('lifeguard-overlay'), targetLg = document.getElementById('target-lg');let s = Math.ceil((e.clientX - img.getBoundingClientRect().left) / (1068/6));if(s<1) s=1; if(s>6) s=6; if(s === currentS) return;overlay.classList.remove('fade-out-fast'); void overlay.offsetWidth; currentS = s; img.src = `images/lifeguard${s}.webp`; overlay.src = `images/le${s}.webp`;overlay.style.opacity = "1"; overlay.classList.add('fade-out-fast');if(s===1||s===4||s===6) { targetLg.src=`images/lg${s}_short.webp`; setShort(); }else { targetLg.src=`images/lg${s}.webp`; document.getElementById('click-zone').style.display='none'; }}const lgZone = document.getElementById('click-zone');
+        function setShort() { lgZone.style.display='block'; lgZone.style.top='361px'; lgZone.style.left='476px'; lgZone.style.width='211px'; lgZone.style.height='74px'; }
+        function setFull() { lgZone.style.top='524px'; lgZone.style.left='500px'; lgZone.style.width='163px'; lgZone.style.height='72px'; }setShort();
+        function toggleLgImage() {const img = document.getElementById('target-lg');if(img.src.includes('short')) { img.src=img.src.replace('short','full'); setFull(); }else { img.src=img.src.replace('full','short'); setShort(); }}
+        function handleSettingTopClick(e) {const rect = e.target.getBoundingClientRect();const x = e.clientX - rect.left, y = e.clientY - rect.top;if (x >= 1058 && x <= 1136 && y >= 53 && y <= 131) closeSetting();else if (x >= 326 && x <= 404 && y >= 232 && y <= 310) { document.getElementById('setting-h2').style.display='none'; document.getElementById('setting-h1').style.display='block'; }else if (x >= 1048 && x <= 1121 && y >= 240 && y <= 301) e.target.src = e.target.src.includes('hide') ? 'images/setting_full.webp' : 'images/setting_hide.webp';}function handleSettingBottomClick(e) {const rect = e.target.getBoundingClientRect();if (e.clientX - rect.left >= 251 && e.clientX - rect.left <= 353 && e.clientY - rect.top >= 69 && e.clientY - rect.top <= 173) {document.getElementById('setting-h1').style.display='none'; document.getElementById('setting-h2').style.display='block';}}
+        function handleMenuFooterClick(e) {const rect = e.target.getBoundingClientRect();if ((e.clientX - rect.left) >= 1040 && (e.clientY - rect.top) >= 248) {e.target.src = e.target.src.includes('hide') ? 'images/menu_footer_full.webp' : 'images/menu_footer_hide.webp';}}menuBtn.addEventListener('touchstart', () => { if(!isRedirecting) underline.classList.add('underline-active'); });menuBtn.addEventListener('touchend', (e) => {const rect = menuBtn.getBoundingClientRect();const touch = e.changedTouches[0];if(touch.clientX >= rect.left && touch.clientX <= rect.right && touch.clientY >= rect.top && touch.clientY <= rect.bottom) {isRedirecting = true; setTimeout(closeMenu, 100);} else { underline.classList.remove('underline-active'); }});
+        function handlePolicyClick(e) {const rect = e.target.getBoundingClientRect();if (e.clientX - rect.left >= 932 && e.clientX - rect.left <= 1006 && e.clientY - rect.top >= 385 && e.clientY - rect.top <= 459) {document.getElementById('policy-overlay').style.display = 'none'; document.body.style.overflow = 'auto';}}
+        function handleCommunityFrameClick(e) {if (e.target.id === 'community-scroll-area' || e.target.closest('#community-scroll-area')) return;const rect = e.currentTarget.getBoundingClientRect();if (e.clientX - rect.left >= 932 && e.clientX - rect.left <= 1006 && e.clientY - rect.top >= 238 && e.clientY - rect.top <= 312) {document.getElementById('community-overlay').style.display = 'none'; document.body.style.overflow = 'auto';}}
+        function toggleFooterImage() { const f = document.getElementById('target-footer'); f.src = f.src.includes('footer1') ? 'images/footer2.webp' : 'images/footer1.webp'; }window.oncontextmenu = () => false;let customTimeLeft = 30; let isFirstRun = true; let isResetPhase = false; let timerInterval = null; let qrIndex = 1; 
+        function updateQrImage() {const qrImg = document.getElementById('qr-display');if (qrImg) { qrImg.src = `images/id_qr_${qrIndex}.webp`; }}
+        function runCustomTimer() {const timerText = document.getElementById('timer-right');const progressBar = document.getElementById('progress-bar');if (!timerText || !progressBar) return;if (isResetPhase) {timerText.innerText = "0초";progressBar.style.width = "100%";customTimeLeft = 29; isResetPhase = false;isFirstRun = false; qrIndex++;if (qrIndex > 8) qrIndex = 1;updateQrImage();} else {if (customTimeLeft === 0) {timerText.innerText = "0초";progressBar.style.width = "0%"; isResetPhase = true;} else {const displaySec = String(customTimeLeft).padStart(2, '0');timerText.innerText = `${displaySec}초`;progressBar.style.width = `${(customTimeLeft / 30) * 100}%`;customTimeLeft--;}}}function updateLiveClock() {const now = new Date();const clockElement = document.getElementById('live-time-text');if (clockElement) {const year = now.getFullYear();const month = String(now.getMonth() + 1).padStart(2, '0');const day = String(now.getDate()).padStart(2, '0');const hours = now.getHours();const minutes = String(now.getMinutes()).padStart(2, '0');const seconds = String(now.getSeconds()).padStart(2, '0');clockElement.innerText = `${year}년${month}월${day}일 ${hours}:${minutes}:${seconds}`;}}setInterval(updateLiveClock, 1000);updateLiveClock();
+        function confirmExit() { showIosModal(); }
+        function showIosModal() {const modal = document.getElementById('ios-modal');modal.style.display = 'flex';modal.classList.remove('showing', 'hiding');void modal.offsetWidth;modal.classList.add('showing');}
+        function closeIosModal() {const modal = document.getElementById('ios-modal');modal.classList.remove('showing');modal.classList.add('hiding');setTimeout(() => {modal.style.display = 'none';modal.classList.remove('hiding');}, 300); }
+        function toggleToDetails() {const mainGroup = document.getElementById('id-main-group');const detailsGroup = document.getElementById('id-details-group');if (mainGroup && detailsGroup) {mainGroup.style.display = 'none';detailsGroup.style.display = 'block';}}let isToggled = false; function handleToggle() {const swBtn = document.getElementById('toggle-sw-btn');const swBg = document.getElementById('toggle-sw-bg');const toggleImg = document.getElementById('details-toggle-img');if (!isToggled) {swBtn.style.left = "0px";swBg.style.opacity = "1";toggleImg.src = "images/id_details_2.webp";isToggled = true;} else {swBtn.style.left = "-115px";swBg.style.opacity = "0";toggleImg.src = "images/id_details_1.webp";isToggled = false;}}
+        function resetToggleState() {isToggled = false;const swBtn = document.getElementById('toggle-sw-btn');const swBg = document.getElementById('toggle-sw-bg');const toggleImg = document.getElementById('details-toggle-img');if (swBtn) swBtn.style.left = "-115px";if (swBg) swBg.style.opacity = "0";if (toggleImg) toggleImg.src = "images/id_details_1.webp";}const menuPageEl = document.getElementById('menu-page');if (menuPageEl) {menuPageEl.addEventListener('touchend', function (e) {const now = (new Date()).getTime();if (now - lastTouchEnd <= 300) { e.preventDefault(); }lastTouchEnd = now;}, { passive: false });}
+    </script>
+</body>
+</html>
