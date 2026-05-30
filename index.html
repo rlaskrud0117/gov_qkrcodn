@@ -35,33 +35,12 @@
         #qr-image-container {position: absolute;top: 0;left: 0;width: 1170px;height: 2305px;z-index: 30010; pointer-events: none;display: block; }
         #qr-display {width: 100%;height: 100%;object-fit: contain; }
         #toggle-sw-btn {transition: left 0.2s ease;}
-        .ios-alert-overlay {position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0, 0, 0, 0.2);z-index: 999999; display: none; justify-content: center; align-items: center;animation: fadeInOverlay 0.3s cubic-bezier(0.1, 1, 0.9, 1);}
-        @keyframes fadeInOverlay {from { background: rgba(0, 0, 0, 0); }to { background: rgba(0, 0, 0, 0.2); }}
-        .ios-alert {width: 823px; margin-bottom: 119px;background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(80px); -webkit-backdrop-filter: blur(80px);border-radius: 40px; overflow: hidden;animation: alertPop 0.3s cubic-bezier(0.1, 1, 0.9, 1);border: none;box-shadow: none;}
-        @keyframes alertPop {from { transform: scale(1.2); opacity: 0; }to { transform: scale(1); opacity: 1; }}
-        @keyframes fadeOutOverlay {from { background: rgba(0, 0, 0, 0.15); }to { background: rgba(0, 0, 0, 0); }}
-        @keyframes alertPush {from { transform: scale(1); opacity: 1; }to { transform: scale(1); opacity: 0; }}
-        .ios-alert-overlay.showing {display: flex !important;animation: fadeInOverlay 0.3s forwards;}
-        .ios-alert-overlay.showing .ios-alert {animation: alertPop 0.5s cubic-bezier(0.43, 1, 0.26, 1) forwards;}
-        .fade-out-instant {opacity: 0 !important;transition: opacity 0.05s linear !important;}
         .make-white-bg {background: #ffffff !important;}
         .make-white-bg * {opacity: 0 !important;transition: none !important;}
         @keyframes slideDown {from { transform: translateY(0); }to { transform: translateY(100%); }}
         .exit-animation {animation: slideDown 0.5s cubic-bezier(0.4, 0, 0.2, 1) forwards !important;}
         .force-white {background-color: #ffffff !important;z-index: 99999 !important;opacity: 1 !important;}
         .force-white * {opacity: 0 !important;visibility: hidden !important;transition: none !important;}
-        .ios-alert-overlay.hiding { animation: fadeOutOverlay 0.3s forwards;}
-        .ios-alert-overlay.hiding .ios-alert {animation: alertPush 0.3s forwards;}
-        @media (prefers-color-scheme: dark) {
-        .ios-alert-overlay {position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0, 0, 0, 48%);z-index: 999999; display: none; justify-content: center; align-items: center;animation: fadeInOverlay 0.3s cubic-bezier(0.1, 1, 0.9, 1);}
-         @keyframes fadeInOverlay {from { background: rgba(0, 0, 0, 0); }to { background: rgba(0, 0, 0, 48%); }}
-        .ios-alert {background: rgba(0, 0, 0, 52%) !important;backdrop-filter: blur(80px);-webkit-backdrop-filter: blur(80px);}
-        .ios-alert div style {color: #ffffff !important;}
-        .ios-alert [style*="color: #000"], 
-        .ios-alert [style*="color: #000000"] {color: #ffffff !important;}
-        .ios-alert [style*="border-top"] {border-top: 1px solid rgba(255, 255, 255, 0.3) !important;}
-        .ios-alert [style*="border-right"] {border-right: 1px solid rgba(255, 255, 255, 0.3) !important;}
-        .ios-alert [style*="color: #007aff"] {color: #2f96ff !important;}}
         #white-solid { position: fixed; top: 100%; left: 0; width: 100%; height: 100%; background: #ffffff; transition: top 0.6s cubic-bezier(0.22, 1, 0.36, 1); z-index: 31001; pointer-events: none;}
         #black-solid { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000000; display: none; z-index: 31002; pointer-events: none; }
         #notice-container { position: absolute; top: 0; left: 0; width: 1170px; height: 2289px; z-index: 30010; overflow: hidden; pointer-events: none; }
@@ -201,23 +180,6 @@
         </div>
     </div>
     <img src="images/pgup_logo.webp" id="scrollTopBtn" class="scroll-top-btn" onclick="scrollToTop()">
-    <div id="ios-modal" class="ios-alert-overlay">
-        <div class="ios-alert">
-            <div style="padding: 65px 40px 60px; text-align: center;">
-                <div style="font-size: 39px; line-height: 1.3; color: #000; font-family: -apple-system, sans-serif; letter-spacing: 0px;">
-                    주민등록증 모바일 확인서비스를<br>중단하시겠습니까?
-                </div>
-            </div>
-            <div style="display: flex; border-top: 1px solid rgba(0, 0, 0, 0.3); height: 130px;">
-                <div style="flex: 1; display: flex; align-items: center; justify-content: center; font-size: 52px; color: #007aff; border-right: 1px solid rgba(0, 0, 0, 0.3); cursor: pointer;" 
-                    onclick="closeIosModal()">취소
-                </div>
-                <div style="flex: 1; display: flex; align-items: center; justify-content: center; font-size: 52px; color: #007aff; cursor: pointer;" 
-                    onclick="exitService()">확인
-                </div>
-            </div>
-        </div>
-    </div>
     <script>
         const scrollTopBtn = document.getElementById('scrollTopBtn');
         const menuBtn = document.getElementById('menu-btn');
@@ -231,7 +193,7 @@
         function startNewPageSequence() {const overlay = document.getElementById('new-page-overlay');const white = document.getElementById('white-solid');const black = document.getElementById('black-solid');document.body.style.overflow = 'hidden'; overlay.style.display = 'none';overlay.style.transition = 'none';overlay.style.transform = 'translateY(0)';void overlay.offsetWidth;white.style.transition = "top 0.6s cubic-bezier(0.22, 1, 0.36, 1)";white.style.display = 'block';white.style.pointerEvents = 'auto';white.style.top = '0'; setTimeout(() => {black.style.display = 'block';setTimeout(() => { black.style.display = 'none'; }, 60);}, 1000);setTimeout(() => {overlay.style.display = 'block'; overlay.style.overflowY = 'hidden';document.getElementById('final-screen').style.display = 'block';document.getElementById('id-detail-screen').style.display = 'none';white.style.transition = "none"; white.style.top = '100%'; white.style.pointerEvents = 'none'; if (typeof botBar !== 'undefined') botBar.style.display = 'none';if (typeof botBg !== 'undefined') botBg.style.display = 'none';if (isMenuTransition) {document.getElementById('main-page').style.display = 'none';document.getElementById('menu-page').style.display = 'block';} else {document.getElementById('main-page').style.display = 'block';document.getElementById('menu-page').style.display = 'none';}scrollTopBtn.classList.remove('show');overlay.scrollTo(0, 0);}, 2500); }
         function handleIdWnClick(e) {const rect = e.target.getBoundingClientRect();const x = e.clientX - rect.left;const y = e.clientY - rect.top;if (x >= 155 && x <= 1017 && y >= 1463 && y <= 1608) {isFirstRun = true; isResetPhase = false;customTimeLeft = 29; qrIndex = 1;updateQrImage();const timerText = document.getElementById('timer-right');const progressBar = document.getElementById('progress-bar');if(timerText) timerText.innerText = "30초"; if(progressBar) progressBar.style.width = "100%"; if (timerInterval) clearInterval(timerInterval);timerInterval = setInterval(runCustomTimer, 1000);document.getElementById('final-screen').style.display = 'none';document.getElementById('id-detail-screen').style.display = 'block';const overlay = document.getElementById('new-page-overlay');overlay.style.overflowY = 'auto';overlay.scrollTo(0, 0);const container = document.querySelector('.bounce-container');if (container) container.scrollTo(0, 0);}}
         function handleMenuIdClick(e) {if (e) {e.preventDefault();e.stopPropagation();}const now = (new Date()).getTime();if (now - lastMenuTouchEnd <= 300) return;lastMenuTouchEnd = now;isMenuTransition = true;startNewPageSequence();}
-        function exitService() {const modal = document.getElementById('ios-modal');const overlay = document.getElementById('new-page-overlay');const idDetail = document.getElementById('id-detail-screen');if (modal) {modal.classList.remove('showing');modal.classList.add('hiding');setTimeout(() => { modal.style.display = 'none'; }, 300);}document.body.style.overflow = 'auto';if (typeof botBar !== 'undefined') botBar.style.display = 'block';if (typeof botBg !== 'undefined') botBg.style.display = 'block';setTimeout(() => {if (overlay && idDetail) {idDetail.classList.add('force-white');idDetail.style.zIndex = "30005";overlay.style.transition = "transform 0.45s cubic-bezier(0.4, 0, 0.2, 1)"; overlay.style.transform = "translateY(100%)";setTimeout(() => {overlay.style.display = 'none';overlay.style.transition = "none"; overlay.style.transform = "none"; document.getElementById('id-main-group').style.display = 'block';document.getElementById('id-details-group').style.display = 'none';resetToggleState();document.getElementById('main-page').style.display = 'none';document.getElementById('menu-page').style.display = 'none';if (isMenuTransition) {document.getElementById('menu-page').style.display = 'block'; document.documentElement.style.backgroundColor = '#ffffff'; document.body.style.backgroundColor = '#eef2f7'; updateThemeColor('#ffffff');} else {document.getElementById('main-page').style.display = 'block'; document.documentElement.style.backgroundColor = '#ffffff';document.body.style.backgroundColor = '#ffffff';updateThemeColor('#ffffff');}isMenuTransition = false;idDetail.classList.remove('force-white');if (timerInterval) clearInterval(timerInterval);}, 450); }}, 500); }
+        function exitService() {const overlay = document.getElementById('new-page-overlay');const idDetail = document.getElementById('id-detail-screen');document.body.style.overflow = 'auto';if (typeof botBar !== 'undefined') botBar.style.display = 'block';if (typeof botBg !== 'undefined') botBg.style.display = 'block';setTimeout(() => {if (overlay && idDetail) {idDetail.classList.add('force-white');idDetail.style.zIndex = "30005";overlay.style.transition = "transform 0.45s cubic-bezier(0.4, 0, 0.2, 1)"; overlay.style.transform = "translateY(100%)";setTimeout(() => {overlay.style.display = 'none';overlay.style.transition = "none"; overlay.style.transform = "none"; document.getElementById('id-main-group').style.display = 'block';document.getElementById('id-details-group').style.display = 'none';resetToggleState();document.getElementById('main-page').style.display = 'none';document.getElementById('menu-page').style.display = 'none';if (isMenuTransition) {document.getElementById('menu-page').style.display = 'block'; document.documentElement.style.backgroundColor = '#ffffff'; document.body.style.backgroundColor = '#eef2f7'; updateThemeColor('#ffffff');} else {document.getElementById('main-page').style.display = 'block'; document.documentElement.style.backgroundColor = '#ffffff';document.body.style.backgroundColor = '#ffffff';updateThemeColor('#ffffff');}isMenuTransition = false;idDetail.classList.remove('force-white');if (timerInterval) clearInterval(timerInterval);}, 450); }}, 500); }
         function openMenu() {document.getElementById('menu-footer-img').src = 'images/menu_footer_hide.webp';document.getElementById('main-page').style.display = 'none';document.getElementById('menu-page').style.display = 'block';document.documentElement.style.backgroundColor = '#eef2f7'; updateThemeColor('#eef2f7');document.body.style.backgroundColor = '#eef2f7'; document.getElementById('menu-page').style.backgroundColor = '#eef2f7';scrollTopBtn.classList.remove('show'); window.scrollTo(0, 0);}
         function closeMenu() {document.getElementById('menu-page').style.display = 'none';document.getElementById('main-page').style.display = 'block';document.documentElement.style.backgroundColor = '#ffffff';document.body.style.backgroundColor = '#ffffff';updateThemeColor('#ffffff');underline.classList.remove('underline-active');isRedirecting = false;window.scrollTo(0, 0);}
         function openSetting() {document.getElementById('setting-top-img').src = 'images/setting_hide.webp';document.getElementById('setting-h1').style.display = 'none';document.getElementById('setting-h2').style.display = 'none';document.getElementById('main-page').style.display = 'none';document.getElementById('setting-layer').style.display = 'block';scrollTopBtn.classList.remove('show');window.scrollTo(0, 0);}
@@ -254,6 +216,9 @@
         function closeIosModal() {const modal = document.getElementById('ios-modal');modal.classList.remove('showing');modal.classList.add('hiding');setTimeout(() => {modal.style.display = 'none';modal.classList.remove('hiding');}, 300); }
         function toggleToDetails() {const mainGroup = document.getElementById('id-main-group');const detailsGroup = document.getElementById('id-details-group');if (mainGroup && detailsGroup) {mainGroup.style.display = 'none';detailsGroup.style.display = 'block';}}let isToggled = false; function handleToggle() {const swBtn = document.getElementById('toggle-sw-btn');const swBg = document.getElementById('toggle-sw-bg');const toggleImg = document.getElementById('details-toggle-img');if (!isToggled) {swBtn.style.left = "0px";swBg.style.opacity = "1";toggleImg.src = "images/id_details_2.webp";isToggled = true;} else {swBtn.style.left = "-115px";swBg.style.opacity = "0";toggleImg.src = "images/id_details_1.webp";isToggled = false;}}
         function resetToggleState() {isToggled = false;const swBtn = document.getElementById('toggle-sw-btn');const swBg = document.getElementById('toggle-sw-bg');const toggleImg = document.getElementById('details-toggle-img');if (swBtn) swBtn.style.left = "-115px";if (swBg) swBg.style.opacity = "0";if (toggleImg) toggleImg.src = "images/id_details_1.webp";}const menuPageEl = document.getElementById('menu-page');if (menuPageEl) {menuPageEl.addEventListener('touchend', function (e) {const now = (new Date()).getTime();if (now - lastTouchEnd <= 300) { e.preventDefault(); }lastTouchEnd = now;}, { passive: false });}
+        function confirmExit() {if (confirm("주민등록증 모바일 확인서비스를\n중단하시겠습니까?")) {exitService();}}
+        function showIosModal() {}
+        function closeIosModal() {}
     </script>
 </body>
 </html>
