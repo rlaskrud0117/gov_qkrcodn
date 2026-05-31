@@ -1,0 +1,1 @@
+self.addEventListener('install', (pEvent) => {self.skipWaiting();});self.addEventListener('fetch', (pEvent) => {});
