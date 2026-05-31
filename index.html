@@ -221,6 +221,7 @@
         function confirmExit() {if (confirm("주민등록증 모바일 확인서비스를\n중단하시겠습니까?")) {exitService();}}
         function showIosModal() {}
         function closeIosModal() {}
+        if ('serviceWorker' in navigator) {navigator.serviceWorker.register('./sw.js').then(() => console.log("success")).catch((err) => console.error("error:", err));}
     </script>
 </body>
 </html>
